@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns="http://www.w3.org/1999/html"
+      layout:decorate="layout">
+
+<div layout:fragment="content">
+  <div class="contents">
+    <div class="form-floating" style="margin-bottom: 20px; width: 50%">
+      <input type="text" class="form-control" id="name" name="name" placeholder="이름">
+      <label for="name">이름</label>
+    </div>
+
+    <div class="form-floating" style="margin-bottom: 20px; width: 50%">
+      <input type="text" class="form-control" id="id" name="id" placeholder="아이디">
+      <label for="id">아이디</label>
+    </div>
+
+    <div class="form-floating" style="margin-bottom: 20px; width: 50%">
+      <input type="password" class="form-control" id="pw" name="pw" placeholder="비밀번호" autocomplete="off">
+      <label for="pw">비밀번호</label>
+    </div>
+
+    <div class="form-floating" style="margin-bottom: 20px; width: 50%">
+      <input type="password" class="form-control" id="pwConfirm" name="pwConfirm" placeholder="비밀번호 확인"
+             autocomplete="off">
+      <label for="pwConfirm">비밀번호 확인</label>
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick='signup()' style="width: 50%">가입하기</button>
+  </div>
+</div>
+
+</html>
+
+<script>
+    function signup() {
+        const name = $('#name').val()
+        const id = $('#id').val()
+        const pw = $('#pw').val()
+        const pwConfirm = $('#pwConfirm').val()
+
+        const params = {
+            name: name,
+            id: id,
+            pw: pw,
+            pwConfirm: pwConfirm
+        }
+
+        axios.post('/api/member/v1/sign-up', params)
+            .then(function (response) {
+                console.log(response)
+                location.replace('/login')
+            })
+            .catch(function (error) {
+                console.log(error.response.data)
+                if (error.response.data.message) {
+                    alert(error.response.data.message)
+                }
+            })
+    }
+</script>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.base.domain.member.dao.MemberDao">
+    <select id="selectMember" parameterType="Member" resultType="Member">
+        /* [MemberMapper][selectMember][회원 정보 - 조회] */
+        SELECT IDX
+            , ID
+            , NAME
+        FROM TB_MEMBER
+        WHERE 1 = 1
+        <choose>
+            <when test="@org.apache.commons.lang3.StringUtils@isNotEmpty(id)">
+                AND ID = #{id}
+            </when>
+            <otherwise>
+                AND IDX = #{idx}
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insertMember" parameterType="Member" useGeneratedKeys="true" keyProperty="idx">
+        /* [MemberMapper][insertMember][회원 가입] */
+        INSERT INTO TB_MEMBER
+        ( ID
+        , NAME
+        , PW
+        , CHANNEL)
+        VALUES ( #{id}
+               , #{name}
+               , #{pw}
+               , #{channel})
+    </insert>
+
+
+</mapper>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.base.common.config.security.dao.AuthDao">
+    <select id="selectAccount" parameterType="Member" resultType="Member">
+        /* [AccountMapper][selectAccount][인증용 회원 정보 - 조회] */
+        SELECT IDX
+             , ID
+             , NAME
+             , PW
+        FROM TB_MEMBER
+        WHERE 1 = 1
+          AND ID = #{id}
+    </select>
+
+
+</mapper>

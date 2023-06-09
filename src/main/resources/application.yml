@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: loc
+
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+    mode: HTML5
+    cache: false
+
+  messages:
+    basename: classpath:message/message
+    cache-duration: -1
+    encoding: UTF-8
+
+  salt: Have#a#NiceDay!
+
+springdoc:
+  show-actuator: true
+
+logging:
+  level:
+    org.springframework.boot.autoconfigure: ERROR
+
+jwt:
+  issuer: base
+  secret-key: Albert####Einstein!

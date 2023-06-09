@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.base.common.config.security.dao.AuthDao">
+    <select id="selectAccount" parameterType="Member" resultType="Member">
+        /* [AuthMapper][selectAccount][인증용 회원 정보 - 조회] */
+        SELECT IDX
+             , ID
+             , NAME
+             , PW
+        FROM TB_MEMBER
+        WHERE 1 = 1
+          AND ID = #{id}
+    </select>
+
+    <select id="selectAuthToken" parameterType="AuthTokenEntity" resultType="AuthTokenEntity">
+        /* [AuthMapper][selectAuthToken][로그인된 리프래시 토큰 - 조회] */
+        SELECT MBR_IDX
+             , REFRESH_TOKEN
+             , IP
+             , AGENT
+             , LOGIN_DT
+             , EXPIRATION_DT
+        FROM TB_AUTH_TOKEN
+        WHERE 1 = 1
+          AND REFRESH_TOKEN = #{refreshToken}
+    </select>
+
+    <insert id="insertAuthToken" parameterType="AuthTokenEntity">
+        /* [AuthMapper][insertAuthToken][리프레시 토큰 저장] */
+        INSERT INTO TB_AUTH_TOKEN
+        ( REFRESH_TOKEN
+        , MBR_IDX
+        , IP
+        , AGENT
+        , LOGIN_DT
+        , EXPIRATION_DT)
+        VALUES ( #{refreshToken}
+               , #{mbrIdx}
+               , #{ip}
+               , #{agent}
+               , #{loginDt}
+               , #{expirationDt})
+    </insert>
+
+
+</mapper>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns="http://www.w3.org/1999/html"
+      layout:decorate="layout">
+
+<div layout:fragment="content">
+  <div class="contents">
+    로그인 완료!!..
+  </div>
+</div>
+
+</html>
+
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        userInfo()
+    });
+
+    axios.interceptors.response.use(null, (error) => {
+        if (error.config && error.response && error.response.status === 401) {
+            return updateAccessToken().then(() => {
+                const accessToken = localStorage.getItem('accessToken')
+                error.config.headers.Authorization = `Bearer ${accessToken}`
+                return axios(error.config);
+            });
+        }
+
+        return Promise.reject(error);
+    });
+
+    function userInfo() {
+        const accessToken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiYXNlIiwiaWF0IjoxNjg2MDEwOTQ4LCJleHAiOjE2ODYwMTQ1NDgsIm1lbWJlckF1dGgiOnsibmFtZSI6Iu2FjOyKpO2EsCIsImlkeCI6MTE3fX0.rXSzfB0lf_oXz2UXXwb10dmG0J7qxH2tbMrfMOfCjmY'
+        axios.get('/api/member/v1/info', {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
+            .then(function (response) {
+                console.log(response)
+                alert(JSON.stringify(response.data.data))
+            })
+            .catch(function (error) {
+                console.log(error)
+                if (error.response && error.response.data.message) {
+                    alert(error.response.data.message)
+                }
+            })
+    }
+
+    async function updateAccessToken() {
+        await axios.post('/api/member/v1/issue-access-token')
+            .then(function (response) {
+                const accessToken = response.data.data.accessToken
+                localStorage.setItem('accessToken', accessToken)
+            })
+            .catch(function (error) {
+                localStorage.removeItem('accessToken')
+
+                console.log(error.response.data)
+                if (error.response.data.message) {
+                    alert(error.response.data.message)
+                }
+
+                location.replace('/login')
+            })
+    }
+</script>
